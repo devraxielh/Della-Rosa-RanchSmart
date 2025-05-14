@@ -18,15 +18,10 @@ class PastoSerializer(serializers.ModelSerializer):
 
 
 class PotreroSerializer(serializers.ModelSerializer):
-    pasto = serializers.PrimaryKeyRelatedField(queryset=Pasto.objects.all(), write_only=True)
-    pasto_nombre = serializers.SerializerMethodField(read_only=True)
-
+    pasto_info = PastoSerializer(source='pasto', read_only=True)
     class Meta:
         model = Potrero
         fields = '__all__'
-
-    def get_pasto_nombre(self, obj):
-        return obj.pasto.nombre if obj.pasto else None
 
     def validate_coordenadas(self, value):
         if not isinstance(value, list) or len(value) < 3:

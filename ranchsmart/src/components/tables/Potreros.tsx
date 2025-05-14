@@ -8,6 +8,13 @@ import {
 } from "../ui/table";
 import Badge from "../ui/badge/Badge";
 import axios from "axios";
+import PotreroFormModal from "./PotreroFormModal";
+import Button from "../../components/ui/button/Button";
+
+interface Pasto {
+  id: number;
+  nombre: string;
+}
 
 interface Potrero {
   id: number;
@@ -15,7 +22,8 @@ interface Potrero {
   coordenadas: number[][];
   estado: number;
   area_m2: number;
-  pasto: string | null;
+  pasto: number | null;
+  pasto_info: Pasto | null;
 }
 
 const API_URL = import.meta.env.VITE_API_URL + "potreros/";
@@ -45,6 +53,7 @@ const estadoColor = (estado: number): "success" | "warning" | "error" => {
 export default function BasicTableOne() {
   const [potreros, setPotreros] = useState<Potrero[]>([]);
   const [filtro, setFiltro] = useState("");
+  const [potreroSeleccionado, setPotreroSeleccionado] = useState<Potrero | null>(null);
 
   const cargarPotreros = async () => {
     try {
@@ -65,7 +74,6 @@ export default function BasicTableOne() {
 
   return (
     <div className="space-y-4">
-      {/* Input de filtro */}
       <input
         type="text"
         placeholder="🔍 Filtrar por nombre..."
@@ -74,50 +82,59 @@ export default function BasicTableOne() {
         className="w-full max-w-sm px-4 py-2 text-sm border rounded-md dark:bg-gray-800 dark:text-white dark:border-gray-600"
       />
 
+      {potreroSeleccionado && (
+        <PotreroFormModal
+          potrero={potreroSeleccionado}
+          onClose={() => {
+            setPotreroSeleccionado(null);
+            cargarPotreros();
+          }}
+        />
+      )}
+
       <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
         <div className="max-w-full overflow-x-auto">
           <Table>
-            <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
+            <TableHeader className="border-b border-gray-100 dark:border-white/[0.05] bg-gray-50 dark:bg-gray-800">
               <TableRow>
-                <TableCell isHeader className="px-5 py-3 text-start font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                <TableCell isHeader className="px-6 py-3 text-left font-semibold text-sm text-gray-600 dark:text-gray-300">
                   Nombre
                 </TableCell>
-                <TableCell isHeader className="px-5 py-3 text-start font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                <TableCell isHeader className="px-6 py-3 text-left font-semibold text-sm text-gray-600 dark:text-gray-300">
                   Estado
                 </TableCell>
-                <TableCell isHeader className="px-5 py-3 text-start font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                <TableCell isHeader className="px-6 py-3 text-left font-semibold text-sm text-gray-600 dark:text-gray-300">
                   Área (m²)
                 </TableCell>
-                <TableCell isHeader className="px-5 py-3 text-start font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                <TableCell isHeader className="px-6 py-3 text-left font-semibold text-sm text-gray-600 dark:text-gray-300">
                   Pasto
                 </TableCell>
               </TableRow>
             </TableHeader>
-
-            <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+            <TableBody>
               {potrerosFiltrados.map((p) => (
                 <TableRow key={p.id}>
-                  <TableCell className="px-5 py-4 text-start text-theme-sm text-gray-800 dark:text-white">
+                  <TableCell className="px-6 py-3 text-left text-sm text-blue-600">
+                    <Button
+                      size="sm"
+                      variant="primary"
+                      onClick={() => setPotreroSeleccionado(p)}
+                    >
                     {p.nombre}
+                    </Button>
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-start">
+                  <TableCell>
                     <Badge size="sm" color={estadoColor(p.estado)}>
                       {estadoTexto(p.estado)}
                     </Badge>
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-start text-theme-sm text-gray-600 dark:text-gray-300">
-                    {p.area_m2.toFixed(2)} m²
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-start text-theme-sm text-gray-600 dark:text-gray-300">
-                    {p.pasto ?? "Sin pasto"}
-                  </TableCell>
+                  <TableCell>{p.area_m2.toFixed(2)} m²</TableCell>
+                  <TableCell>{p.pasto_info ? p.pasto_info.nombre : "Sin pasto"}</TableCell>
                 </TableRow>
               ))}
               {potrerosFiltrados.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={4} className="px-5 py-4 text-center text-gray-500 dark:text-gray-400">
-                    No se encontraron potreros.
-                  </TableCell>
+                  <TableCell colSpan={4}>No se encontraron potreros.</TableCell>
                 </TableRow>
               )}
             </TableBody>
