@@ -19,6 +19,15 @@ import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/Dashboard/Home";
 import Map from "./pages/Map";
 import Potreros from "./pages/Potreros";
+import Precipitaciones from "./pages/Precipitacion";
+import Aforos from "./pages/Aforos";
+import Pastos from "./pages/Pastos";
+import Calculadora from "./pages/Calculadora";
+import Maleza from "./pages/Maleza";
+import Conteo from "./pages/ConteoAnimal";
+
+
+
 import PrivateRoute from './utils/PrivateRoute';
 
 export default function App() {
@@ -35,6 +44,13 @@ export default function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/map" element={<Map />} />
           <Route path="/potreros" element={<Potreros />} />
+          <Route path="/precipitaciones" element={<Precipitaciones />} />
+          <Route path="/aforos" element={<Aforos />} />
+          <Route path="/pastos" element={<Pastos />} />
+          <Route path="/calculadora" element={<Calculadora />} />
+          <Route path="/maleza" element={<Maleza />} />
+          <Route path="/conteo" element={<Conteo />} />
+
           <Route path="/users" element={<UserProfiles />} />
           <Route path="/videos" element={<Videos />} />
           <Route path="/images" element={<Images />} />

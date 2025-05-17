@@ -9,7 +9,7 @@ import {
 import Badge from "../ui/badge/Badge";
 import axios from "axios";
 import PotreroFormModal from "./PotreroFormModal";
-import Button from "../../components/ui/button/Button";
+import Button from "../ui/button/Button";
 
 interface Pasto {
   id: number;
@@ -97,16 +97,16 @@ export default function BasicTableOne() {
           <Table>
             <TableHeader className="border-b border-gray-100 dark:border-white/[0.05] bg-gray-50 dark:bg-gray-800">
               <TableRow>
-                <TableCell isHeader className="px-6 py-3 text-left font-semibold text-sm text-gray-600 dark:text-gray-300">
+                <TableCell isHeader className="px-6 py-3 text-sm text-gray-800 dark:text-white">
                   Nombre
                 </TableCell>
-                <TableCell isHeader className="px-6 py-3 text-left font-semibold text-sm text-gray-600 dark:text-gray-300">
+                <TableCell isHeader className="px-6 py-3 text-sm text-gray-800 dark:text-white">
                   Estado
                 </TableCell>
-                <TableCell isHeader className="px-6 py-3 text-left font-semibold text-sm text-gray-600 dark:text-gray-300">
+                <TableCell isHeader className="px-6 py-3 text-sm text-gray-800 dark:text-white">
                   Área (m²)
                 </TableCell>
-                <TableCell isHeader className="px-6 py-3 text-left font-semibold text-sm text-gray-600 dark:text-gray-300">
+                <TableCell isHeader className="px-6 py-3 text-sm text-gray-800 dark:text-white">
                   Pasto
                 </TableCell>
               </TableRow>
@@ -117,7 +117,7 @@ export default function BasicTableOne() {
                   <TableCell className="px-6 py-3 text-left text-sm text-blue-600">
                     <Button
                       size="sm"
-                      variant="primary"
+                      variant="outline"
                       onClick={() => setPotreroSeleccionado(p)}
                     >
                     {p.nombre}
@@ -128,8 +128,8 @@ export default function BasicTableOne() {
                       {estadoTexto(p.estado)}
                     </Badge>
                   </TableCell>
-                  <TableCell>{p.area_m2.toFixed(2)} m²</TableCell>
-                  <TableCell>{p.pasto_info ? p.pasto_info.nombre : "Sin pasto"}</TableCell>
+                  <TableCell className="px-6 py-3 text-sm text-gray-800 dark:text-white">{p.area_m2.toFixed(2)} m²</TableCell>
+                  <TableCell className="px-6 py-3 text-sm text-gray-800 dark:text-white">{p.pasto_info ? p.pasto_info.nombre : "Sin pasto"}</TableCell>
                 </TableRow>
               ))}
               {potrerosFiltrados.length === 0 && (

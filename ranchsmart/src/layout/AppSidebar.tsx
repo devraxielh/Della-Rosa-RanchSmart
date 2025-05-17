@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMapLocation, faMapPin } from '@fortawesome/free-solid-svg-icons';
+import { faBrain, faCalculator, faCloudRain, faMapLocation, faMapPin, faSeedling, faSunPlantWilt, faTableList } from '@fortawesome/free-solid-svg-icons';
 
 // Assume these icons are imported from an icon library
 import {
@@ -32,9 +32,37 @@ const navItems: NavItem[] = [
     path: "/map",
   },
   {
+    icon: <FontAwesomeIcon icon={faSeedling} />,
+    name: "Pastos",
+    path: "/pastos",
+  },
+  {
     icon: <FontAwesomeIcon icon={faMapPin} />,
     name: "Potreros",
     path: "/potreros",
+  },
+  {
+    icon: <FontAwesomeIcon icon={faSunPlantWilt} />,
+    name: "Aforos",
+    path: "/aforos",
+  },
+  {
+    icon: <FontAwesomeIcon icon={faCalculator} />,
+    name: "Calculadora de carga animal",
+    path: "/calculadora",
+  },
+  {
+    icon: <FontAwesomeIcon icon={faCloudRain} />,
+    name: "Precipitaciones",
+    path: "/precipitaciones",
+  },
+  {
+    icon: <FontAwesomeIcon icon={faBrain} />,
+    name: "Inteligencia artificial",
+    subItems: [
+      { name: "🌿 Detección de maleza",path: "maleza"},
+      { name: "🐄 Contar Animales",path: "conteo"},
+    ],
   },
 
 ];

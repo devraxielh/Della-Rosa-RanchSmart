@@ -1,6 +1,6 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
-from .models import Potrero, Pasto
+from .models import Potrero, Pasto, Precipitacion, AforoPasto
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
@@ -30,3 +30,15 @@ class PotreroSerializer(serializers.ModelSerializer):
             if not (isinstance(punto, list) and len(punto) == 2 and all(isinstance(c, (int, float)) for c in punto)):
                 raise serializers.ValidationError("Cada coordenada debe ser [lat, lng].")
         return value
+
+class PrecipitacionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Precipitacion
+        fields = '__all__'
+
+class AforoPastoSerializer(serializers.ModelSerializer):
+    potrero_nombre = serializers.CharField(source='potrero.nombre', read_only=True)
+
+    class Meta:
+        model = AforoPasto
+        fields = '__all__'

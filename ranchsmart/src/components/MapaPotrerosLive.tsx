@@ -1,5 +1,5 @@
-import { useEffect, useState, useRef } from 'react';
-import { MapContainer, TileLayer, FeatureGroup as RLFeatureGroup } from 'react-leaflet';
+import { useEffect, useState, useRef, useState as useReactState } from 'react';
+import { MapContainer, TileLayer, FeatureGroup as RLFeatureGroup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import axios from 'axios';
 
@@ -7,11 +7,33 @@ import 'leaflet/dist/leaflet.css';
 
 const API_URL = import.meta.env.VITE_API_URL + 'potreros/';
 
+const ResetViewButton = ({ center, zoom }: { center: [number, number]; zoom: number }) => {
+  const map = useMap();
+  return (
+    <button
+      onClick={() => map.setView(center, zoom)}
+      className="absolute top-4 right-4 z-[9999] bg-white text-sm px-3 py-1 rounded shadow hover:bg-gray-100"
+    >
+      Restablecer mapa
+    </button>
+  );
+};
+
+const ResizeMapOnFullscreen = ({ fullscreen }: { fullscreen: boolean }) => {
+  const map = useMap();
+  useEffect(() => {
+    setTimeout(() => {
+      map.invalidateSize();
+    }, 300);
+  }, [fullscreen]);
+  return null;
+};
+
 const MapaPotreros = () => {
   const featureGroupRef = useRef(null);
   const [potreros, setPotreros] = useState([]);
+  const [fullscreen, setFullscreen] = useReactState(false);
 
-  // Función para traducir estado numérico a texto
   const estadoTexto = (estado) => {
     switch (parseInt(estado)) {
       case 1: return 'En descanso';
@@ -34,7 +56,6 @@ const MapaPotreros = () => {
         group.clearLayers();
 
         data.forEach(p => {
-          // Color por estado
           let color = 'white';
           let fillColor = 'white';
 
@@ -72,12 +93,16 @@ const MapaPotreros = () => {
     cargarPotreros();
   }, []);
 
+  const defaultCenter = [8.6559, -75.9001];
+  const defaultZoom = 14;
+
   return (
-    <div className="h-[70vh] w-full">
+    <div className={`relative w-full ${fullscreen ? 'h-[70vh]' : 'h-[30vh]'}`}>
       <MapContainer
-        center={[8.6559, -75.9001]}
-        zoom={15}
+        center={defaultCenter}
+        zoom={defaultZoom}
         scrollWheelZoom
+        zoomControl={false} // ❌ Oculta botones de zoom
         className="h-full w-full rounded shadow"
       >
         <TileLayer
@@ -85,7 +110,16 @@ const MapaPotreros = () => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <RLFeatureGroup ref={featureGroupRef} />
+        <ResetViewButton center={defaultCenter} zoom={defaultZoom} />
+        <ResizeMapOnFullscreen fullscreen={fullscreen} />
       </MapContainer>
+
+      <button
+        onClick={() => setFullscreen(!fullscreen)}
+        className="absolute bottom-4 left-4 z-[9999] bg-white text-sm px-3 py-1 rounded shadow hover:bg-gray-100"
+      >
+        {fullscreen ? 'Minimizar' : 'Pantalla completa'}
+      </button>
     </div>
   );
 };

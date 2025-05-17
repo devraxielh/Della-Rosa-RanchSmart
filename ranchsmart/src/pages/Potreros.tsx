@@ -1,6 +1,6 @@
 import PageBreadcrumb from "../components/common/PageBreadCrumb";
 import PageMeta from "../components/common/PageMeta";
-import TablaPotreros from "../components/tables/Potreros";
+import TablaPotreros from "../components/Potreros/Potreros";
 
 export default function Blank() {
   return (
