@@ -119,7 +119,7 @@ const MapaPotreros = () => {
 
   return (
     <div className="space-y-6 relative">
-      <div className="h-[25vh] w-full relative">
+      <div className="h-[30vh] w-full relative">
         <MapContainer
           center={defaultCenter}
           zoom={defaultZoom}
